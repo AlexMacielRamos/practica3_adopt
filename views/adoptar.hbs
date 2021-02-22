@@ -1,0 +1,15 @@
+<div class="card individual">
+    <div>
+        You are adpoting <u>{{animalname}}</u>. Please write your user id so we can register you on our database.<br>
+        Thank you for adopting!
+    </div><br>
+    <span>id <input id="u_id" type = "text" data-a="{{id}}"></input></span><br>
+    <a id="link"><button>Adopt</button></a>
+</div>
+<script>
+    var uid = document.getElementById("u_id");
+    uid.addEventListener("change", ()=>{
+        document.getElementById("link").href="/animal/?animal="+
+        uid.getAttribute("data-a")+"&owner="+uid.value;
+    });
+</script>
