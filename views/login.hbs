@@ -1,0 +1,20 @@
+<div>
+    <form>
+        <div>
+            <label for="inputEmail1">Email address</label>
+            <input type="email" id="inputEmail1">
+        </div>
+        <div>
+            <label for="inputPassword1">Password</label>
+            <input type="password" id="inputPassword1">
+        </div>
+        <div>
+            <button type="button">Login</button>
+            <button type="button" id='google-login'>Login with google</button>
+        </div>
+    </form>
+</div>
+<script>
+    const googleLogin = document.querySelector('#google-login');
+    googleLogin.addEventListener('click', () => window.location.replace('http://localhost:3001/auth/google'));
+</script>

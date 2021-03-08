@@ -6,8 +6,16 @@ const lessMiddleware = require('less-middleware');
 const logger = require('morgan');
 const hbs = require('express-handlebars');
 
+const passport=require('passport');
+require('dotenv').config();
+require('./config/passport');
+
+const cookieSession = require('cookie-session');
+
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
+const profileRouter = require('./routes/profile');
 
 const app = express();
 
@@ -22,9 +30,24 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+    cookieSession({
+        maxAge: 24* 60 * 60 * 1000,
+        keys: ['clave']
+    })
+)
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/', usersRouter);
+app.use('/auth', authRouter);
+app.use('/profile', profileRouter);
+
+app.get('/', (req, res)=>{
+    res.render('home', {status:req.user?'logout':'login'});
+});
 
 //catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -33,6 +56,7 @@ next(createError(404));
 
 // // error handler
 app.use(function(err, req, res, next) {
+    console.error(err);
 //   // set locals, only providing error in development
 res.locals.message = err.message;
 res.locals.error = req.app.get('env') === 'development' ? err : {};
